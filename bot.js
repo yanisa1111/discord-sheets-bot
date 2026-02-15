@@ -1,4 +1,4 @@
-//pm2 start bot.js
+
 const { Client, IntentsBitField, EmbedBuilder } = require('discord.js');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 require('dotenv').config();
