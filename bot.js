@@ -164,12 +164,18 @@ async function addDataToSheet(data) {
     allData.push(data);
 
     // เรียงลำดับตามวันที่ (น้อยไปมาก)
-    allData.sort((a, b) => {
-      const dateA = parseDate(a['วันที่ใช้']);
-      const dateB = parseDate(b['วันที่ใช้']);
-      if (!dateA || !dateB) return 0;
-      return dateA - dateB;
-    });
+   // เรียงลำดับตามวันที่ (น้อยไปมาก)
+allData.sort((a, b) => {
+  try {
+    const dateA = parseDate(a['วันที่ใช้']);
+    const dateB = parseDate(b['วันที่ใช้']);
+    if (!dateA || !dateB) return 0;
+    return dateA.getTime() - dateB.getTime();
+  } catch (e) {
+    console.error('Error parsing dates:', e);
+    return 0;
+  }
+});
 
     // ลบ rows เก่าทั้งหมด
     for (let row of rows) {
@@ -251,3 +257,4 @@ client.on('messageCreate', async (message) => {
 // ============================================
 initializeSheet();
 client.login(process.env.DISCORD_TOKEN);
+
