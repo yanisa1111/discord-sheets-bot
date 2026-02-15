@@ -127,7 +127,25 @@ async function addDataToSheet(data) {
       'เลขแทร็กขนส่ง': data.เลขแทร็กขนส่ง || '',
       'เพิ่มเติม': data.เพิ่มเติม || ''
     });
+const allRows = [...rows, { 
+  'วันที่ใช้': data.วันที่ใช้
+}];
 
+// Sort by date
+allRows.sort((a, b) => {
+  const dateA = parseDate(a['วันที่ใช้']);
+  const dateB = parseDate(b['วันที่ใช้']);
+  return dateA - dateB;
+});
+
+// ลบข้อมูลเก่า แล้วเพิ่มใหม่ (เรียงแล้ว)
+for (let row of rows) {
+  await row.delete();
+}
+
+for (let rowData of allRows) {
+  await sheet.addRow(rowData);
+}
     console.log('✅ เพิ่มข้อมูลลง Google Sheets สำเร็จ');
     return true;
   } catch (error) {
@@ -197,4 +215,5 @@ client.on('messageCreate', async (message) => {
 // เริ่มต้น Bot
 // ============================================
 initializeSheet();
+
 client.login(process.env.DISCORD_TOKEN);
