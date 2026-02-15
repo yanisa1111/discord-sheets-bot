@@ -1,3 +1,4 @@
+//pm2 start bot.js
 const { Client, IntentsBitField, EmbedBuilder } = require('discord.js');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 require('dotenv').config();
@@ -47,12 +48,11 @@ function parseUserInput(message) {
   };
 
   const validUsage = ["เทส", "ไพร"];
-  const validSets = ["Hysilens", "Cyrane", "Chisa", "Lynea", "Waguri", "Cerydra"];
+  const validSets = ["Hysilens","Cyrane","Chisa","Lynea","Waguri","Cerydra",];
 
   // ค้นหาวันที่
   let datePattern = /(\d{1,2}(-\d{1,2})?\/\d{1,2}\/\d{2})/g;
-  let dates = message.match(datePattern) || [];
-
+let dates = message.match(datePattern) || [];
   // บันทึกชื่อผู้เช่า (ตัวแรก)
   if (parts.length > 0) {
     data.เฟสผู้เช่า = parts[0];
@@ -184,7 +184,7 @@ client.on('messageCreate', async (message) => {
       .setTitle('📖 วิธีใช้ Sheets Bot')
       .setDescription('**คำสั่งที่ใช้ได้:**')
       .addFields(
-        { name: '!add [ข้อมูล]', value: 'เพิ่มข้อมูลลง Google Sheets\nตัวอย่าง: `!add Yanisa เทส Hysilens 28-29/3/26 30/3/26`' },
+        { name: '!add [ข้อมูล]', value: 'เพิ่มข้อมูลลง Google Sheets\nตัวอย่าง: `!add Yanisa เทส Hysilens 14-15/2/26 16/2/26`' },
         { name: '!help', value: 'แสดงความช่วยเหลือ' }
       )
       .setColor('Blue');
