@@ -29,22 +29,6 @@ async function initializeSheet() {
 }
 
 // ============================================
-// ฟังก์ชันแปลงวันที่
-// ============================================
-function parseDate(dateStr) {
-  if (!dateStr) return null;
-  // รูปแบบ: 14/2/26 หรือ 14-15/2/26
-  const match = dateStr.match(/(\d{1,2})(?:-\d{1,2})?\/(\d{1,2})\/(\d{2})/);
-  if (!match) return null;
-  
-  const day = parseInt(match[1]);
-  const month = parseInt(match[2]);
-  const year = parseInt(match[3]) + 2000;
-  
-  return new Date(year, month - 1, day);
-}
-
-// ============================================
 // ฟังก์ชันวิเคราะห์ข้อมูล
 // ============================================
 function parseUserInput(message) {
@@ -99,6 +83,22 @@ function parseUserInput(message) {
   }
 
   return data;
+}
+
+// ============================================
+// ฟังก์ชันแปลงวันที่ string เป็น Date
+// ============================================
+function dateStringToDate(dateStr) {
+  if (!dateStr) return null;
+  // เอาแค่วันแรก (ลบ -XX ออก)
+  const match = dateStr.match(/(\d{1,2})-?\d{0,2}\/(\d{1,2})\/(\d{2})/);
+  if (!match) return null;
+  
+  const day = parseInt(match[1]);
+  const month = parseInt(match[2]);
+  const year = 2000 + parseInt(match[3]);
+  
+  return new Date(year, month - 1, day);
 }
 
 // ============================================
@@ -164,18 +164,16 @@ async function addDataToSheet(data) {
     allData.push(data);
 
     // เรียงลำดับตามวันที่ (น้อยไปมาก)
-   // เรียงลำดับตามวันที่ (น้อยไปมาก)
-allData.sort((a, b) => {
-  try {
-    const dateA = parseDate(a['วันที่ใช้']);
-    const dateB = parseDate(b['วันที่ใช้']);
-    if (!dateA || !dateB) return 0;
-    return dateA.getTime() - dateB.getTime();
-  } catch (e) {
-    console.error('Error parsing dates:', e);
-    return 0;
-  }
-});
+    allData.sort((a, b) => {
+      const dateA = dateStringToDate(a['วันที่ใช้']);
+      const dateB = dateStringToDate(b['วันที่ใช้']);
+      
+      // ถ้า dateA หรือ dateB เป็น null ให้วางไว้ท้าย
+      if (!dateA) return 1;
+      if (!dateB) return -1;
+      
+      return dateA.getTime() - dateB.getTime();
+    });
 
     // ลบ rows เก่าทั้งหมด
     for (let row of rows) {
@@ -243,7 +241,7 @@ client.on('messageCreate', async (message) => {
       .setTitle('📖 วิธีใช้ Sheets Bot')
       .setDescription('**คำสั่งที่ใช้ได้:**')
       .addFields(
-        { name: '!add [ข้อมูล]', value: 'เพิ่มข้อมูลลง Google Sheets และเรียงตามวันที่\nตัวอย่าง: `!add Yanisa เทส Hysilens 14-15/2/26 16/2/26`' },
+        { name: '!add [ข้อมูล]', value: 'เพิ่มข้อมูลลง Google Sheets และเรียงตามวันที่\nตัวอย่าง: `!add Yanisa เทส Hysilens 28-29/3/26 30/3/26`' },
         { name: '!help', value: 'แสดงความช่วยเหลือ' }
       )
       .setColor('Blue');
@@ -257,4 +255,3 @@ client.on('messageCreate', async (message) => {
 // ============================================
 initializeSheet();
 client.login(process.env.DISCORD_TOKEN);
-
