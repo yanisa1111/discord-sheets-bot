@@ -48,7 +48,7 @@ function parseUserInput(message) {
   };
 
   const validUsage = ["เทส", "ไพร"];
-  const validSets = ["Hysilens"];
+  const validSets = [];
 
   // ค้นหาวันที่
   let datePattern = /(\d{1,2}(-\d{1,2})?\/\d{1,2}\/\d{2})/g;
@@ -197,4 +197,5 @@ client.on('messageCreate', async (message) => {
 // เริ่มต้น Bot
 // ============================================
 initializeSheet();
+
 client.login(process.env.DISCORD_TOKEN);
