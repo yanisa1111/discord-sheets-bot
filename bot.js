@@ -48,7 +48,7 @@ function parseUserInput(message) {
   };
 
   const validUsage = ["เทส", "ไพร"];
-  const validSets = [];
+  const validSets = ["Hysilens","Cyrane","Chisa","Lynea","Waguri","Cerydra",];
 
   // ค้นหาวันที่
   let datePattern = /(\d{1,2}(-\d{1,2})?\/\d{1,2}\/\d{2})/g;
@@ -199,3 +199,4 @@ client.on('messageCreate', async (message) => {
 initializeSheet();
 
 client.login(process.env.DISCORD_TOKEN);
+
