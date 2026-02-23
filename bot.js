@@ -1,6 +1,6 @@
 
 const { Client, IntentsBitField, EmbedBuilder } = require('discord.js');
-const axios = require('axios');
+const { GoogleSpreadsheet } = require('google-spreadsheet');  // ← เพิ่มบรรทัดนี้
 require('dotenv').config();
 
 const client = new Client({
@@ -198,4 +198,5 @@ client.on('messageCreate', async (message) => {
 // ============================================
 initializeSheet();
 client.login(process.env.DISCORD_TOKEN);
+
 
