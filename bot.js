@@ -1,6 +1,6 @@
 
 const { Client, IntentsBitField, EmbedBuilder } = require('discord.js');
-const { GoogleSpreadsheet } = require('google-spreadsheet');
+const axios = require('axios');
 require('dotenv').config();
 
 const client = new Client({
@@ -198,3 +198,4 @@ client.on('messageCreate', async (message) => {
 // ============================================
 initializeSheet();
 client.login(process.env.DISCORD_TOKEN);
+
